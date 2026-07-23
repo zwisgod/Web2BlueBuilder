@@ -5,6 +5,7 @@ const os = require('os');
 const fs = require('fs-extra');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../../..');
+const BUNDLED_ANDROID_SDK = path.join(PROJECT_ROOT, 'android-sdk');
 const DEFAULT_ANDROID_SDK = path.join(
     os.homedir(),
     'AppData',
@@ -29,6 +30,7 @@ async function resolveAndroidSdkDir() {
     const candidates = [
         process.env.ANDROID_SDK_ROOT,
         process.env.ANDROID_HOME,
+        BUNDLED_ANDROID_SDK,
         DEFAULT_ANDROID_SDK,
     ].filter(Boolean);
 
@@ -42,7 +44,8 @@ async function resolveAndroidSdkDir() {
         '未找到 Android SDK。\n' +
         '  请先安装 Android Studio / Android SDK，并满足以下任一条件：\n' +
         '  1. 设置 ANDROID_SDK_ROOT 或 ANDROID_HOME 环境变量\n' +
-        `  2. 使用默认路径：${DEFAULT_ANDROID_SDK}`
+        `  2. 将便携 Android SDK 放到项目根目录：${BUNDLED_ANDROID_SDK}\n` +
+        `  3. 使用 Android Studio 默认路径：${DEFAULT_ANDROID_SDK}`
     );
 }
 
