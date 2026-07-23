@@ -1,0 +1,67 @@
+// app/build.gradle — Android 应用模块构建脚本（模板）
+//
+// 【占位符说明】（由 configurator.js 在构建时替换）
+//   WEB2BLUE_APP_PACKAGE  →  用户指定的包名，如 com.example.ledcontroller
+
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    // namespace 对应 Java 源码中的 package，保持框架代码包名不变
+    namespace 'com.web2blue.shell'
+
+    compileSdk 34
+
+    defaultConfig {
+        // applicationId 是 APK 在设备和应用市场的唯一标识符，由 configurator 替换
+        applicationId "com.web2blue.app"
+
+        minSdk 21          // Android 5.0+：支持 BLE 和 RFCOMM，覆盖 98%+ 设备
+        targetSdk 34       // 跟随最新 targetSdk 声明，避免兼容性警告
+        versionCode 3
+        versionName "1.1"
+    }
+
+    buildTypes {
+        debug {
+            // Debug 包不混淆，方便开发调试
+            minifyEnabled false
+            // Debug 包签名使用 Android 默认调试密钥，无需手动配置
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            // release 包需要配置签名，此处留空由用户自行配置
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    // 指定 assets 目录：用户 HTML 文件由 CLI 的 injector 写入此目录
+    sourceSets {
+        main {
+            assets.srcDirs = ['src/main/assets']
+        }
+    }
+}
+
+dependencies {
+    // AndroidX AppCompat：提供 Theme.AppCompat 主题，兼容旧版 Android
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+
+    // 云服务密钥使用 Android Keystore 加密后保存
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
+
+    // Material Design 组件（可选，调试控制台 UI 使用）
+    implementation 'com.google.android.material:material:1.11.0'
+
+    // 二维码扫描：用于药箱配网码识别
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    // 离线中文语音识别：系统未安装 RecognitionService 时作为后备
+    implementation 'com.alphacephei:vosk-android:0.3.47'
+}

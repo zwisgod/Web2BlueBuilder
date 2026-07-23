@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  bg_debug_btn.xml — 调试控制台工具栏按钮背景
+
+  设计：圆角矩形 + 半透明白色描边 + 深色半透明填充
+  用于：debug_console.xml 中的 HEX/STR 切换、清除、关闭按钮
+
+  selector 支持按下状态反馈（pressed 时加深背景色），增强点击手感。
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 按下状态：背景加深，给用户明确的视觉反馈 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <solid android:color="#55FFFFFF" />
+            <stroke
+                android:width="1dp"
+                android:color="#66FFFFFF" />
+        </shape>
+    </item>
+
+    <!-- 获得焦点状态（键盘导航）-->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <solid android:color="#33FFFFFF" />
+            <stroke
+                android:width="1dp"
+                android:color="#8800D4FF" />
+        </shape>
+    </item>
+
+    <!-- 默认状态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="6dp" />
+            <!-- 深色半透明填充：与调试窗深色背景融合 -->
+            <solid android:color="#33FFFFFF" />
+            <!-- 细描边：让按钮边界清晰可见 -->
+            <stroke
+                android:width="1dp"
+                android:color="#44FFFFFF" />
+        </shape>
+    </item>
+
+</selector>

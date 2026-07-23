@@ -1,0 +1,22 @@
+// settings.gradle — Gradle 项目设置
+//
+// 声明项目名称和包含的子模块
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Web2BlueShell"
+include ':app'

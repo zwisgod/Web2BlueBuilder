@@ -1,0 +1,118 @@
+#!/bin/sh
+# gradlew — Gradle Wrapper 启动脚本（Linux / macOS / Unix）
+#
+# 本脚本由 Gradle Wrapper 工具生成，等价于系统安装的 gradle 命令，
+# 区别在于它会自动下载并使用 gradle-wrapper.properties 中指定的 Gradle 版本，
+# 确保所有开发者和 CI 使用完全相同的 Gradle 版本构建，消除"在我机器上能跑"的问题。
+#
+# 使用方式：
+#   ./gradlew assembleDebug     构建 Debug APK
+#   ./gradlew assembleRelease   构建 Release APK
+#   ./gradlew clean             清理构建产物
+#   ./gradlew tasks             列出所有可用任务
+
+##############################################################################
+# 兼容性设置
+##############################################################################
+
+# 严格模式：任何命令失败立即退出脚本（防止静默错误）
+set -e
+
+# 解析脚本真实路径（处理软链接情况）
+PRG="$0"
+while [ -h "$PRG" ]; do
+    ls=$(ls -ld "$PRG")
+    link=$(expr "$ls" : '.*-> \(.*\)$')
+    if expr "$link" : '/.*' > /dev/null; then
+        PRG="$link"
+    else
+        PRG=$(dirname "$PRG")"/$link"
+    fi
+done
+
+# 脚本所在目录（即 android-shell 根目录）
+PRGDIR=$(dirname "$PRG")
+APP_HOME=$(cd "$PRGDIR" > /dev/null && pwd)
+
+##############################################################################
+# JVM 配置
+##############################################################################
+
+# 默认 JVM 选项（可被环境变量 GRADLE_OPTS / JAVA_OPTS 覆盖）
+DEFAULT_JVM_OPTS='"-Xmx64m" "-Xms64m"'
+
+# 检测 JAVA_HOME
+if [ -n "$JAVA_HOME" ]; then
+    if [ -x "$JAVA_HOME/jre/sh/java" ]; then
+        # IBM 的 JDK on AIX
+        JAVACMD="$JAVA_HOME/jre/sh/java"
+    else
+        JAVACMD="$JAVA_HOME/bin/java"
+    fi
+    if [ ! -x "$JAVACMD" ]; then
+        die "错误：JAVA_HOME 设置了但找不到可执行的 java 命令：
+  JAVA_HOME='$JAVA_HOME'
+  请检查 JAVA_HOME 设置是否正确。"
+    fi
+else
+    JAVACMD="java"
+    which java > /dev/null 2>&1 || die "错误：找不到 java 命令，请安装 JDK 17+ 并设置 JAVA_HOME 环境变量。"
+fi
+
+##############################################################################
+# Gradle Wrapper JAR 路径
+##############################################################################
+
+WRAPPER_JAR="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+WRAPPER_PROPERTIES="$APP_HOME/gradle/wrapper/gradle-wrapper.properties"
+
+# 检查 wrapper jar 是否存在
+if [ ! -f "$WRAPPER_JAR" ]; then
+    echo ""
+    echo "═══════════════════════════════════════════════════════════════════"
+    echo "  错误：gradle-wrapper.jar 不存在！"
+    echo "  路径：$WRAPPER_JAR"
+    echo ""
+    echo "  解决方法（选择其中一种）："
+    echo ""
+    echo "  方法 1（推荐）：用 Android Studio 打开工程后点击 Sync，会自动生成。"
+    echo ""
+    echo "  方法 2：若已安装 Gradle，在本目录执行："
+    echo "    gradle wrapper --gradle-version 8.4"
+    echo ""
+    echo "  方法 3：手动下载 jar（约 57KB）："
+    echo "    https://github.com/gradle/gradle/raw/v8.4.0/gradle/wrapper/gradle-wrapper.jar"
+    echo "    放置到：$WRAPPER_JAR"
+    echo "═══════════════════════════════════════════════════════════════════"
+    echo ""
+    exit 1
+fi
+
+##############################################################################
+# 类路径与参数拼装
+##############################################################################
+
+# 收集环境变量中的额外 JVM 参数
+GRADLE_OPTS="${GRADLE_OPTS:-}"
+JAVA_OPTS="${JAVA_OPTS:-}"
+
+# 拼装完整的 java 启动命令
+exec "$JAVACMD" \
+    $DEFAULT_JVM_OPTS \
+    $JAVA_OPTS \
+    $GRADLE_OPTS \
+    "-Dorg.gradle.appname=$APP_BASE_NAME" \
+    -classpath "$WRAPPER_JAR" \
+    org.gradle.wrapper.GradleWrapperMain \
+    "$@"
+
+##############################################################################
+# 工具函数
+##############################################################################
+
+die() {
+    echo ""
+    echo "  $*"
+    echo ""
+    exit 1
+}

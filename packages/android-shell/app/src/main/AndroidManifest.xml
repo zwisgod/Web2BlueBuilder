@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AndroidManifest.xml — Android 壳工程清单文件（模板）
+
+  【占位符说明】（由 configurator.js 在构建时替换）
+    WEB2BLUE_APP_PACKAGE  →  用户指定的包名，如 com.example.ledcontroller
+    WEB2BLUE_APP_NAME     →  用户指定的应用名，如 LED 控制器
+
+  【蓝牙权限说明】
+    Android 6~11：BLUETOOTH + BLUETOOTH_ADMIN + ACCESS_FINE_LOCATION（扫描需要）
+    Android 12+  ：BLUETOOTH_CONNECT + BLUETOOTH_SCAN（新增运行时权限）
+    所有版本均保留，由系统自动按版本适配。
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 网络权限：HTML 页面里的 CDN 资源和 AI 接口请求都依赖此权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission
+        android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation" />
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  蓝牙权限（经典蓝牙 SPP + BLE 双协议必需）             -->
+    <!-- ════════════════════════════════════════════════════════ -->
+
+    <!-- API 30 及以下：经典蓝牙基础权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+
+    <!-- API 31+（Android 12）：新蓝牙运行时权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+
+    <!-- BLE 扫描在 Android 6~11 需要位置权限（系统强制要求） -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:maxSdkVersion="30" />
+
+    <!-- 悬浮窗权限（调试控制台使用 TYPE_APPLICATION，不需要 SYSTEM_ALERT_WINDOW） -->
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  硬件特性声明                                           -->
+    <!-- ════════════════════════════════════════════════════════ -->
+
+    <!-- BLE 功能声明：required=false 允许无 BLE 的设备安装（仅用经典蓝牙） -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
+
+    <!-- Android 11+：允许发现设备上已安装的系统 TTS 引擎 -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  应用配置                                               -->
+    <!-- ════════════════════════════════════════════════════════ -->
+
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <!--
+          usesCleartextTraffic=true：允许 WebView 加载 file:// 和 http:// 资源。
+          如果用户的 HTML 有本地资源引用，这个配置是必需的。
+        -->
+
+        <activity
+            android:name=".WebViewActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

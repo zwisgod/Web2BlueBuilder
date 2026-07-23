@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ic_launcher_background.xml — 应用图标背景层
+
+  自适应图标（Adaptive Icon）由前景层 + 背景层组成。
+  背景层：深蓝渐变，营造科技感。
+  尺寸：108dp × 108dp（Android 规范要求的自适应图标尺寸）
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- 使用 gradient 制作从深蓝到更深蓝的渐变背景 -->
+    <gradient
+        android:type="radial"
+        android:gradientRadius="100%"
+        android:centerX="0.5"
+        android:centerY="0.5"
+        android:startColor="#FF0D2137"
+        android:endColor="#FF061018" />
+
+</shape>

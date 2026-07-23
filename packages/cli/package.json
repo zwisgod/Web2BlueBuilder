@@ -1,0 +1,23 @@
+{
+  "name": "web2blue-cli",
+  "version": "1.0.0",
+  "description": "将纯 HTML/JS/CSS 项目一键打包为具备 Android 原生蓝牙通信能力的 APK",
+  "bin": {
+    "web2blue": "./src/index.js"
+  },
+  "main": "./src/index.js",
+  "scripts": {
+    "build": "node src/index.js build",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": ["bluetooth", "android", "apk", "html", "ble", "spp"],
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

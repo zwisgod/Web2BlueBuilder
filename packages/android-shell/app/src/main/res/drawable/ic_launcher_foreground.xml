@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ic_launcher_foreground.xml — 应用图标前景层（蓝牙主题矢量图标）
+
+  设计：蓝牙符号 + 外圆环，体现"蓝牙 + Web"的产品定位。
+  颜色：亮蓝 #00D4FF（品牌色）
+  尺寸：108dp × 108dp（自适应图标前景层标准尺寸）
+
+  Path 说明：
+  - 外圆环：大半径圆环，细描边
+  - 蓝牙符号：由两个三角形和一条竖线组成的经典蓝牙 logo
+  - viewportWidth/Height = 108，与自适应图标尺寸对应
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- 外圆环 -->
+    <path
+        android:fillColor="#0000D4FF"
+        android:strokeColor="#FF00D4FF"
+        android:strokeWidth="2.5"
+        android:pathData="M54,18
+            a36,36 0 1,0 0.001,0 Z" />
+
+    <!-- 蓝牙符号主体 -->
+    <!-- 竖线（中轴）-->
+    <path
+        android:fillColor="#FF00D4FF"
+        android:pathData="M52,28 L52,80 L56,80 L56,28 Z" />
+
+    <!-- 右上角折线（↗）：从中轴顶端出发，到右上顶点，再回到中轴中间 -->
+    <path
+        android:fillColor="#FF00D4FF"
+        android:pathData="M54,28 L66,38 L54,48 Z" />
+
+    <!-- 右下角折线（↘）：从中轴中间出发，到右下顶点，再回到中轴底端 -->
+    <path
+        android:fillColor="#FF00D4FF"
+        android:pathData="M54,60 L66,70 L54,80 Z" />
+
+    <!-- 左上斜线 -->
+    <path
+        android:fillColor="#FF00D4FF"
+        android:pathData="M54,28 L43,37 L46,40 L54,34 Z" />
+
+    <!-- 左下斜线 -->
+    <path
+        android:fillColor="#FF00D4FF"
+        android:pathData="M54,80 L43,71 L46,68 L54,74 Z" />
+
+    <!-- 品牌点缀：右侧两个小圆点（信号感） -->
+    <path
+        android:fillColor="#8800D4FF"
+        android:pathData="M72,46 a3,3 0 1,0 0.001,0 Z" />
+    <path
+        android:fillColor="#5500D4FF"
+        android:pathData="M78,50 a2,2 0 1,0 0.001,0 Z" />
+
+</vector>

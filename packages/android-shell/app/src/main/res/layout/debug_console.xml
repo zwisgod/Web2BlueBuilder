@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  debug_console.xml — 硬件调试悬浮控制台布局
+
+  设计要点：
+  1. 半透明深色背景（不遮挡下方 WebView 内容的关键区域）
+  2. 顶部工具栏：标题 + HEX/STR 切换 + 清除 + 关闭
+  3. 中间区域：日志 ListView（占大部分高度）
+  4. 底部分隔线：视觉上与 WebView 内容区分
+
+  ID 说明（必须与 DebugConsoleView.java 中的 findViewById 完全一致）：
+    @+id/tv_console_title   → 标题文字
+    @+id/btn_toggle_mode    → HEX/STR 切换按钮
+    @+id/btn_clear          → 清除日志按钮
+    @+id/btn_close          → 关闭悬浮窗按钮
+    @+id/lv_debug_log       → 日志列表
+
+  尺寸：高度由 DebugConsoleView.java 在 WindowManager.LayoutParams 中设置为屏幕 45%，
+        此处 layout_height 设 match_parent，由 WindowManager 控制实际高度。
+
+  颜色方案（深色主题，高对比度）：
+    背景:         #CC000000（80% 透明黑）
+    工具栏背景:   #DD0D1B2A（深蓝黑）
+    分隔线:       #33FFFFFF（20% 透明白）
+    按钮文字:     #FFEAEAEA
+    标题文字:     #FF00D4FF（品牌蓝）
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000"
+    android:orientation="vertical">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  顶部工具栏                                                -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="#DD0D1B2A"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <!-- 🔧 标题图标 + 文字 -->
+        <TextView
+            android:id="@+id/tv_console_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawablePadding="6dp"
+            android:text="🔧 调试控制台"
+            android:textColor="#FF00D4FF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- HEX / STR 切换按钮 -->
+        <TextView
+            android:id="@+id/btn_toggle_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_debug_btn"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="模式：STR"
+            android:textColor="#FFEAEAEA"
+            android:textSize="11sp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- 清除日志按钮 -->
+        <TextView
+            android:id="@+id/btn_clear"
+            android:layout_width="wrap_content"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_debug_btn"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="清除"
+            android:textColor="#FFFFAA44"
+            android:textSize="11sp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- 关闭按钮 -->
+        <TextView
+            android:id="@+id/btn_close"
+            android:layout_width="32dp"
+            android:layout_height="28dp"
+            android:background="@drawable/bg_debug_btn"
+            android:gravity="center"
+            android:text="✕"
+            android:textColor="#FFFF6B6B"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <!-- 工具栏与日志列表之间的分隔线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#33FFFFFF" />
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  日志列表                                                  -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <!--
+      ListView 承载所有日志条目。
+      divider: 每条日志之间的分隔线（极细 0.5dp，深色，不干扰阅读）
+      stackFromBottom: false（新日志追加到底部，视觉上需要配合 setSelection 自动滚动）
+      transcriptMode: 1 = TRANSCRIPT_MODE_NORMAL（新增条目时自动滚动到底部，
+                       但 transcriptMode 在某些版本有 bug，建议手动 setSelection 控制）
+    -->
+    <ListView
+        android:id="@+id/lv_debug_log"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#00000000"
+        android:divider="#1AFFFFFF"
+        android:dividerHeight="0.5dp"
+        android:fadeScrollbars="true"
+        android:fastScrollEnabled="false"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="never"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:stackFromBottom="false"
+        android:transcriptMode="disabled"
+        android:clipToPadding="false" />
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  底部状态栏（显示当前日志条数）                             -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#33FFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:background="#DD0D1B2A"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:orientation="horizontal">
+
+        <!-- 提示文字 -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="↑ 向上拖动日志区域可查看历史记录"
+            android:textColor="#FF445566"
+            android:textSize="10sp" />
+
+        <!-- 颜色图例 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="■ SYS  "
+            android:textColor="#FFCCCCCC"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="■ TX  "
+            android:textColor="#FF66FF66"
+            android:textSize="10sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="■ RX"
+            android:textColor="#FFFFDD44"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

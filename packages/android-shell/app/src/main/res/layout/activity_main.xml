@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  activity_main.xml — MainActivity 启动过渡页布局
+
+  设计语言：深色主题 + 居中品牌内容 + 底部进度条
+  背景：深邃蓝黑渐变感（纯色模拟，避免引入自定义 drawable 依赖）
+
+  布局结构：
+  ┌──────────────────────────────────┐
+  │                                  │
+  │                                  │
+  │           🔵 (蓝牙图标)           │
+  │          应用名称                 │
+  │       Web2Blue Powered           │
+  │                                  │
+  │                                  │
+  │  ████████████████ (进度条)        │
+  │  "正在初始化蓝牙环境..."           │
+  └──────────────────────────────────┘
+-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF0D1117"
+    android:fitsSystemWindows="true">
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  中央品牌区域                                              -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <LinearLayout
+        android:id="@+id/ll_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!--
+          蓝牙图标：使用 Android 系统内置图标 ic_dialog_info 作为占位，
+          正式版可替换为自定义 ic_bluetooth.xml drawable。
+          这里用一个带圆形背景的 TextView 模拟蓝牙图标 (𝗕)
+        -->
+        <TextView
+            android:id="@+id/tv_icon"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="@drawable/ic_launcher_background"
+            android:gravity="center"
+            android:text="B"
+            android:textColor="#FF00D4FF"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-black" />
+
+        <!-- 应用名称：由 MainActivity 动态从 strings.xml 读取 -->
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/app_name"
+            android:textColor="#FFEAEAEA"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- 副标题 -->
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Bluetooth · HTML · Android"
+            android:textColor="#FF5588AA"
+            android:textSize="13sp"
+            android:letterSpacing="0.1" />
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  底部加载区域（进度条 + 状态文字）                         -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dp"
+        android:layout_marginHorizontal="40dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- 状态提示文字 -->
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="正在初始化蓝牙环境..."
+            android:textColor="#FF667788"
+            android:textSize="12sp" />
+
+        <!--
+          水平进度条（不确定模式 indeterminate=true）：
+          表示正在加载中，无需知道确切进度。
+          颜色由 theme 的 colorAccent 决定，默认为蓝色系。
+        -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:indeterminate="true"
+            android:indeterminateTint="#FF00D4FF"
+            android:progressBackgroundTint="#FF1E3A4A" />
+
+    </LinearLayout>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  版权信息（右下角，极小字体）                              -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Powered by Web2Blue"
+        android:textColor="#FF2A3A4A"
+        android:textSize="10sp" />
+
+</RelativeLayout>

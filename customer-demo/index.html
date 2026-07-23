@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#081016">
+  <title>Web2Blue Demo</title>
+  <style>
+    :root {
+      --bg: #081016;
+      --panel: rgba(246, 249, 246, 0.08);
+      --panel-strong: rgba(246, 249, 246, 0.14);
+      --text: #f4f7ef;
+      --muted: rgba(244, 247, 239, 0.68);
+      --line: rgba(244, 247, 239, 0.16);
+      --accent: #67e8a5;
+      --warn: #ffb84d;
+      --danger: #ff6b6b;
+      --ink: #0d171f;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100svh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 8%, rgba(103, 232, 165, 0.2), transparent 30%),
+        linear-gradient(155deg, #081016 0%, #14202b 43%, #0c151b 100%);
+      overflow-x: hidden;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      min-height: 100svh;
+      padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      animation: rise 520ms ease both;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+
+    .mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #e9f8ec;
+      color: #0b1b16;
+      box-shadow: 0 14px 36px rgba(103, 232, 165, 0.2);
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: 0;
+      line-height: 1.05;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status {
+      min-width: 92px;
+      padding: 9px 11px;
+      border-radius: 8px;
+      background: rgba(244, 247, 239, 0.09);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .status strong {
+      display: block;
+      margin-top: 2px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 240px;
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+        #101c25;
+      border: 1px solid var(--line);
+      animation: rise 640ms 90ms ease both;
+    }
+
+    .road {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, transparent 0 13%, rgba(255, 255, 255, 0.12) 13.4% 13.8%, transparent 14.2% 86%, rgba(255, 255, 255, 0.12) 86.4% 86.8%, transparent 87.2%),
+        linear-gradient(180deg, rgba(103, 232, 165, 0.14), transparent 65%);
+    }
+
+    .lane {
+      position: absolute;
+      left: 50%;
+      bottom: -36px;
+      width: 8px;
+      height: 280px;
+      transform: translateX(-50%) perspective(170px) rotateX(54deg);
+      background: repeating-linear-gradient(180deg, rgba(244, 247, 239, 0.85) 0 26px, transparent 26px 54px);
+      opacity: 0.75;
+      animation: laneMove 920ms linear infinite;
+    }
+
+    .car {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      width: 116px;
+      height: 150px;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 24px 42px rgba(0, 0, 0, 0.4));
+    }
+
+    .car svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .pulse {
+      position: absolute;
+      left: 50%;
+      bottom: 96px;
+      width: 220px;
+      height: 220px;
+      border-radius: 999px;
+      border: 1px solid rgba(103, 232, 165, 0.35);
+      transform: translate(-50%, 50%) scale(0.32);
+      animation: scan 2.4s ease-out infinite;
+    }
+
+    .pulse:nth-child(2) { animation-delay: 800ms; }
+    .pulse:nth-child(3) { animation-delay: 1600ms; }
+
+    .hero-copy {
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      top: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      z-index: 2;
+    }
+
+    .hero-copy h2 {
+      margin: 0;
+      max-width: 210px;
+      font-size: clamp(24px, 7vw, 34px);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+
+    .signal {
+      display: grid;
+      grid-template-columns: repeat(4, 5px);
+      gap: 4px;
+      height: 26px;
+      align-items: end;
+      padding-top: 3px;
+    }
+
+    .signal span {
+      width: 5px;
+      border-radius: 3px;
+      background: var(--accent);
+      opacity: 0.45;
+      animation: bars 1.1s ease-in-out infinite alternate;
+    }
+
+    .signal span:nth-child(1) { height: 9px; }
+    .signal span:nth-child(2) { height: 15px; animation-delay: 90ms; }
+    .signal span:nth-child(3) { height: 21px; animation-delay: 180ms; }
+    .signal span:nth-child(4) { height: 26px; animation-delay: 270ms; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      animation: rise 680ms 160ms ease both;
+    }
+
+    .metric {
+      min-height: 112px;
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric strong {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      margin-top: 12px;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .metric small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .meter {
+      height: 7px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(244, 247, 239, 0.12);
+    }
+
+    .meter i {
+      display: block;
+      width: var(--value, 42%);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 360ms ease, background 360ms ease;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+      animation: rise 700ms 220ms ease both;
+    }
+
+    .control-row {
+      border-radius: 8px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+
+    .control-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 13px;
+    }
+
+    .control-head label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .control-head output {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      animation: rise 720ms 280ms ease both;
+    }
+
+    .btn {
+      min-height: 50px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #07130f;
+      background: var(--accent);
+      font-weight: 800;
+      transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn.secondary {
+      color: var(--text);
+      background: var(--panel-strong);
+      border: 1px solid var(--line);
+    }
+
+    .log {
+      border-radius: 8px;
+      background: rgba(4, 8, 12, 0.42);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      animation: rise 740ms 340ms ease both;
+    }
+
+    .log header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .log-list {
+      height: 132px;
+      overflow: auto;
+      padding: 11px 14px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .log-line {
+      color: rgba(244, 247, 239, 0.72);
+      white-space: nowrap;
+    }
+
+    .log-line strong {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes laneMove {
+      to { background-position-y: 54px; }
+    }
+
+    @keyframes scan {
+      0% { opacity: 0.55; transform: translate(-50%, 50%) scale(0.26); }
+      80% { opacity: 0; transform: translate(-50%, 50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, 50%) scale(1); }
+    }
+
+    @keyframes bars {
+      to { opacity: 1; transform: scaleY(0.72); }
+    }
+
+    @media (min-width: 720px) {
+      body {
+        display: grid;
+        place-items: center;
+        padding: 28px;
+      }
+
+      .app {
+        width: min(440px, 100%);
+        min-height: auto;
+        border-radius: 22px;
+        border: 1px solid rgba(244, 247, 239, 0.12);
+        box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none">
+            <path d="M12 3l7 4v5c0 4.6-2.9 7.7-7 9-4.1-1.3-7-4.4-7-9V7l7-4z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <h1>BlueDrive</h1>
+          <p>HTML5 + Android 蓝牙壳演示</p>
+        </div>
+      </div>
+      <div class="status" id="status">状态<strong>未连接</strong></div>
+    </header>
+
+    <section class="hero" aria-label="车辆雷达演示">
+      <div class="road"></div>
+      <div class="pulse"></div>
+      <div class="pulse"></div>
+      <div class="pulse"></div>
+      <div class="lane"></div>
+      <div class="hero-copy">
+        <h2>把网页开发成果直接装进手机。</h2>
+        <div class="signal" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="car" aria-hidden="true">
+        <svg viewBox="0 0 116 150" fill="none">
+          <path d="M31 17c5-8 49-8 54 0 7 13 13 49 13 88 0 21-8 31-40 31s-40-10-40-31c0-39 6-75 13-88z" fill="#ecf5ee"/>
+          <path d="M36 24c8-5 36-5 44 0l9 32H27l9-32z" fill="#182631"/>
+          <path d="M30 68h56c4 0 8 4 8 8v36c0 9-7 14-36 14s-36-5-36-14V76c0-4 4-8 8-8z" fill="#f8fff8"/>
+          <path d="M34 86h12M70 86h12" stroke="#0e1b22" stroke-width="5" stroke-linecap="round"/>
+          <path d="M41 125h34" stroke="#0e1b22" stroke-width="5" stroke-linecap="round"/>
+          <path d="M24 56l-10 9M92 56l10 9" stroke="#67e8a5" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="metrics">
+      <div class="metric">
+        <label>前方距离</label>
+        <strong><span id="distance">78</span><small>cm</small></strong>
+        <div class="meter"><i id="distanceMeter"></i></div>
+      </div>
+      <div class="metric">
+        <label>轮速</label>
+        <strong><span id="speed">1260</span><small>rpm</small></strong>
+        <div class="meter"><i id="speedMeter"></i></div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control-row">
+        <div class="control-head">
+          <label for="distanceLimit">距离阈值</label>
+          <output id="distanceLimitValue">35 cm</output>
+        </div>
+        <input id="distanceLimit" type="range" min="5" max="160" value="35">
+      </div>
+      <div class="control-row">
+        <div class="control-head">
+          <label for="speedLimit">速度阈值</label>
+          <output id="speedLimitValue">3000 rpm</output>
+        </div>
+        <input id="speedLimit" type="range" min="300" max="6000" step="100" value="3000">
+      </div>
+    </section>
+
+    <section class="actions">
+      <button class="btn" id="connectBtn" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path d="M7 7l10 10-5 4V3l5 4L7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        连接设备
+      </button>
+      <button class="btn secondary" id="demoBtn" type="button">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+          <path d="M8 5v14l11-7L8 5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        模拟数据
+      </button>
+    </section>
+
+    <section class="log">
+      <header>
+        <span>通信日志</span>
+        <span id="bridgeMode">WebView 模拟</span>
+      </header>
+      <div class="log-list" id="logList" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var connected = false;
+      var demoTimer = null;
+      var bridge = window.BlueApp;
+      var hasNativeBridge = !!(bridge && typeof bridge.connect === "function");
+      var state = { distance: 78, speed: 1260 };
+      var els = {
+        status: document.getElementById("status"),
+        distance: document.getElementById("distance"),
+        speed: document.getElementById("speed"),
+        distanceMeter: document.getElementById("distanceMeter"),
+        speedMeter: document.getElementById("speedMeter"),
+        distanceLimit: document.getElementById("distanceLimit"),
+        speedLimit: document.getElementById("speedLimit"),
+        distanceLimitValue: document.getElementById("distanceLimitValue"),
+        speedLimitValue: document.getElementById("speedLimitValue"),
+        connectBtn: document.getElementById("connectBtn"),
+        demoBtn: document.getElementById("demoBtn"),
+        logList: document.getElementById("logList"),
+        bridgeMode: document.getElementById("bridgeMode")
+      };
+
+      els.bridgeMode.textContent = hasNativeBridge ? "Android 蓝牙桥接" : "WebView 模拟";
+
+      window.BlueApp = window.BlueApp || {};
+      window.BlueApp._onEvent = function (event, data) {
+        if (event === "connected") {
+          connected = true;
+          setStatus("已连接");
+          addLog("SYS", "设备连接成功 " + ((data && data.mac) || ""));
+        }
+        if (event === "disconnected") {
+          connected = false;
+          setStatus("未连接");
+          addLog("SYS", "设备已断开");
+        }
+        if (event === "data" && data && data.str) {
+          parsePacket(data.str);
+          addLog("RX", data.str.trim());
+        }
+        if (event === "error") {
+          addLog("ERR", (data && data.message) || "未知错误");
+        }
+      };
+
+      els.connectBtn.addEventListener("click", function () {
+        if (hasNativeBridge) {
+          addLog("SYS", "请求 Android 蓝牙权限并打开设备选择");
+          try {
+            bridge.connect("", "SPP");
+          } catch (err) {
+            addLog("ERR", err.message);
+          }
+          return;
+        }
+        connected = !connected;
+        setStatus(connected ? "已连接" : "未连接");
+        addLog("SYS", connected ? "模拟设备 JDY-31 已连接" : "模拟设备已断开");
+      });
+
+      els.demoBtn.addEventListener("click", function () {
+        if (demoTimer) {
+          clearInterval(demoTimer);
+          demoTimer = null;
+          els.demoBtn.lastChild.nodeValue = " 模拟数据";
+          addLog("SYS", "停止模拟数据流");
+          return;
+        }
+        demoTimer = setInterval(tickDemo, 900);
+        els.demoBtn.lastChild.nodeValue = " 停止模拟";
+        addLog("SYS", "开始模拟传感器数据");
+        tickDemo();
+      });
+
+      els.distanceLimit.addEventListener("input", function () {
+        els.distanceLimitValue.textContent = this.value + " cm";
+        sendCommand("D:" + this.value);
+      });
+
+      els.speedLimit.addEventListener("input", function () {
+        els.speedLimitValue.textContent = this.value + " rpm";
+        sendCommand("S:" + this.value);
+      });
+
+      function tickDemo() {
+        state.distance = Math.max(12, Math.min(150, state.distance + Math.round((Math.random() - 0.45) * 18)));
+        state.speed = Math.max(300, Math.min(5600, state.speed + Math.round((Math.random() - 0.42) * 520)));
+        updateMetrics();
+        addLog("RX", state.distance + "," + state.speed + "," + els.distanceLimit.value + "," + els.speedLimit.value);
+      }
+
+      function parsePacket(packet) {
+        var parts = packet.trim().split(",");
+        if (parts.length < 2) return;
+        state.distance = Number(parts[0]) || state.distance;
+        state.speed = Number(parts[1]) || state.speed;
+        updateMetrics();
+      }
+
+      function updateMetrics() {
+        var danger = state.distance <= Number(els.distanceLimit.value);
+        els.distance.textContent = Math.round(state.distance);
+        els.speed.textContent = Math.round(state.speed);
+        els.distanceMeter.style.setProperty("--value", Math.min(100, state.distance / 160 * 100) + "%");
+        els.speedMeter.style.setProperty("--value", Math.min(100, state.speed / 6000 * 100) + "%");
+        els.distanceMeter.style.background = danger ? "var(--danger)" : "var(--accent)";
+      }
+
+      function sendCommand(command) {
+        addLog("TX", command);
+        if (hasNativeBridge && typeof bridge.send === "function") {
+          try { bridge.send(command + "\n"); } catch (err) { addLog("ERR", err.message); }
+        }
+      }
+
+      function setStatus(text) {
+        els.status.innerHTML = "状态<strong>" + text + "</strong>";
+        els.connectBtn.lastChild.nodeValue = connected ? " 断开设备" : " 连接设备";
+      }
+
+      function addLog(type, text) {
+        var row = document.createElement("div");
+        var time = new Date().toTimeString().slice(0, 8);
+        row.className = "log-line";
+        row.innerHTML = "<strong>[" + type + "]</strong> " + time + "  " + escapeHtml(text);
+        els.logList.appendChild(row);
+        while (els.logList.children.length > 30) els.logList.removeChild(els.logList.firstChild);
+        els.logList.scrollTop = els.logList.scrollHeight;
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, function (char) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char];
+        });
+      }
+
+      updateMetrics();
+      addLog("SYS", "演示页已加载，入口 index.html 正常");
+    })();
+  </script>
+</body>
+</html>

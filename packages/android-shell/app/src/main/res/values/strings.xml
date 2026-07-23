@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  strings.xml — 应用字符串资源（模板）
+
+  【占位符说明】（由 configurator.js 在构建时替换）
+    WEB2BLUE_APP_NAME  →  用户通过 name 参数指定的应用名称
+-->
+<resources>
+    <!-- 应用名称：显示在桌面图标下方和多任务卡片标题 -->
+    <string name="app_name">智能清扫系统</string>
+
+    <!-- 调试控制台相关文案 -->
+    <string name="debug_console_title">硬件调试控制台</string>
+    <string name="debug_btn_clear">清除</string>
+    <string name="debug_btn_close">关闭</string>
+    <string name="debug_btn_hex">HEX</string>
+    <string name="debug_btn_str">STR</string>
+
+    <!-- 权限申请相关提示文案 -->
+    <string name="permission_bluetooth_rationale">此应用需要蓝牙权限以连接硬件设备</string>
+    <string name="permission_location_rationale">Android 12 以下系统扫描蓝牙设备需要位置权限</string>
+</resources>

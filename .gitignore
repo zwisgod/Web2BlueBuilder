@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Android / Gradle build outputs
+.gradle/
+build/
+**/build/
+**/.gradle/
+
+# Local IDE files
+.idea/
+.vscode/
+*.iml
+
+# Local machine configuration
+local.properties
+**/local.properties
+*.keystore
+*.jks
+keystore.properties
+
+# Generated APKs and temporary build material
+output/
+_staging/
+downloads/
+packages/android-shell/app/src/main/assets/web/
+packages/android-shell/app/src/main/assets/vosk-model-small-cn-0.22/
+11.html
+使用说明.txt
+
+# Bundled local runtime archives / extracted runtimes
+jdk17/
+
+# Logs and caches
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db

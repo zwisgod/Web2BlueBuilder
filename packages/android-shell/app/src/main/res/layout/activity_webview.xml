@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  activity_webview.xml — WebViewActivity 的布局
+
+  极简设计：WebView 占满全屏，没有任何原生 UI 元素。
+  所有 UI 都由用户的 HTML/CSS 控制，这就是"壳"的核心思想。
+
+  说明：
+  - id="@+id/webview" 必须与 WebViewActivity.java 中的 findViewById 匹配
+  - fitsSystemWindows=false：让 WebView 延伸到状态栏下方（沉浸式效果）
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF000000">
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FF000000"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+
+</FrameLayout>
