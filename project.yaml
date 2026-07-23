@@ -1,0 +1,28 @@
+name: Web2BlueBuilder
+authors: [zwisgod]
+category: Tool
+tags: [Android, WebView, APK, CLI, JavaScript Bridge, 嵌入式, 蓝牙, 语音识别]
+status: in-progress
+updated: 2026-07-23
+summary: 面向嵌入式项目演示的 HTML/CSS/JavaScript 一键打包 Android APK 工具，支持 WebView 原生桥接、蓝牙通信、语音识别、TTS 和便携构建环境。
+
+collection: 嵌入式工具链
+demo: https://github.com/zwisgod/Web2BlueBuilder
+readme: README.md
+
+links:
+  repo: https://github.com/zwisgod/Web2BlueBuilder
+
+subskills:
+  - name: web2blue-cli
+    status: stable
+    path: packages/cli
+    summary: Node.js 命令行构建器，负责注入网页资源、配置应用名和包名，并调用 Gradle 生成 APK。
+  - name: android-webview-shell
+    status: stable
+    path: packages/android-shell
+    summary: Android WebView 壳工程，提供 JavaScript Bridge、蓝牙通信、语音识别、TTS 和调试控制台等原生能力。
+  - name: portable-setup
+    status: experimental
+    path: setup-portable.ps1
+    summary: Windows 一键便携环境脚本，自动准备 Node.js、JDK 17 和 Android SDK 命令行构建环境。
