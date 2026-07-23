@@ -29,6 +29,7 @@ packages/android-shell/app/src/main/assets/vosk-model-small-cn-0.22/
 使用说明.txt
 
 # Bundled local runtime archives / extracted runtimes
+node/
 jdk17/
 android-sdk/
 
