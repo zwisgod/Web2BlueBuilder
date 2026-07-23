@@ -30,6 +30,7 @@ packages/android-shell/app/src/main/assets/vosk-model-small-cn-0.22/
 
 # Bundled local runtime archives / extracted runtimes
 jdk17/
+android-sdk/
 
 # Logs and caches
 *.log
